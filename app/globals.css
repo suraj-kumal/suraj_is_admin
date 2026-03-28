@@ -183,5 +183,7 @@
     }
     body {
         @apply bg-background text-foreground;
+        -ms-overflow-style: none; /* IE & Edge */
+        scrollbar-width: none; /* Firefox */
     }
 }

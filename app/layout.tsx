@@ -1,6 +1,7 @@
 import { ThemeProvider } from "next-themes";
 import { libreBaskerville } from "@/app/fonts";
 import { Toaster } from "@/components/ui/sonner";
+import "./globals.css";
 export default function RootLayout({
   children,
 }: {

@@ -1,3 +1,4 @@
+import NavBar from "@/components/NavBar";
 export default function dashboardLayout({
   children,
 }: {
@@ -5,7 +6,7 @@ export default function dashboardLayout({
 }) {
   return (
     <div>
-      <h1>Dashboard Layout</h1>
+      <NavBar />
       {children}
     </div>
   );

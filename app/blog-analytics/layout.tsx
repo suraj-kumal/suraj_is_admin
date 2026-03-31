@@ -1,13 +1,13 @@
 import NavBar from "@/components/NavBar";
-export default function manageblogslayout({
+export default function BlogAnalyticsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <>
       <NavBar />
       {children}
-    </div>
+    </>
   );
 }

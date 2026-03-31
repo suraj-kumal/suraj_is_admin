@@ -11,12 +11,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast, type ExternalToast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import login from "@/lib/controllers/loginController";
 import { useRouter } from "next/navigation";
 import { User, Session } from "@supabase/supabase-js";
+import { authChecker } from "@/lib/controllers/authChecker";
 type LoginResponse = {
   data: { user: User; session: Session } | null;
   error: string | null;
@@ -32,6 +33,14 @@ export default function Home() {
   const toastPosition: ExternalToast = {
     position: "top-center",
   };
+
+  const auth = authChecker();
+
+  useEffect(() => {
+    if (auth) {
+      router.push("/dashboard");
+    }
+  }, []);
 
   const validateEmail = () => {
     if (email !== surajEmail) {

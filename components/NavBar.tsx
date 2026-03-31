@@ -217,10 +217,10 @@ const NavBar = () => {
       {/* Mobile NavBar */}
       <div className="md:hidden flex items-center justify-between px-4 py-3">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-primary text-primary-foreground font-bold text-sm">
+          {/*<div className="flex items-center justify-center w-7 h-7 rounded-lg bg-primary text-primary-foreground font-bold text-sm">
             B
-          </div>
-          <span className="text-lg font-bold">BlogHub</span>
+          </div>*/}
+          <span className="text-lg font-bold">Здорово</span>
         </Link>
 
         <div className="flex items-center gap-2">

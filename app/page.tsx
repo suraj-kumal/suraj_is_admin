@@ -17,7 +17,7 @@ import { Spinner } from "@/components/ui/spinner";
 import login from "@/lib/controllers/loginController";
 import { useRouter } from "next/navigation";
 import { User, Session } from "@supabase/supabase-js";
-import { authChecker } from "@/lib/controllers/authChecker";
+import { supabase } from "@/lib/config/supabaseClient";
 type LoginResponse = {
   data: { user: User; session: Session } | null;
   error: string | null;
@@ -34,13 +34,32 @@ export default function Home() {
     position: "top-center",
   };
 
-  const auth = authChecker();
-
   useEffect(() => {
-    if (auth) {
-      router.push("/dashboard");
-    }
-  }, []);
+    const checkUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        router.push("/dashboard");
+      }
+    };
+
+    checkUser();
+
+    // Optional: listen for auth changes (login/logout)
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session) {
+          router.push("/dashboard");
+        }
+      },
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, [router]);
 
   const validateEmail = () => {
     if (email !== surajEmail) {

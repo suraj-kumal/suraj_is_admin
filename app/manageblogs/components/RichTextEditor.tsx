@@ -10,6 +10,7 @@ import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import Underline from "@tiptap/extension-underline";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 
 import { createLowlight } from "lowlight";
 import { Extension } from "@tiptap/core";
@@ -26,6 +27,8 @@ import {
   Undo,
   Redo,
   Image as ImageIcon,
+  Link as LinkIcon,
+  Link2Off,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -95,6 +98,13 @@ const RichTextEditor = forwardRef(
           },
         }),
 
+        Link.configure({
+          openOnClick: false,
+          HTMLAttributes: {
+            class: "text-blue-500 underline cursor-pointer",
+          },
+        }),
+
         CodeBlockLowlight.configure({
           lowlight,
           HTMLAttributes: {
@@ -129,46 +139,105 @@ const RichTextEditor = forwardRef(
       }
     };
 
+    const addLink = () => {
+      const url = prompt("Enter link URL");
+      if (url) {
+        editor.chain().focus().setLink({ href: url }).run();
+      }
+    };
+
     return (
       <div className="border rounded-md">
         {/* TOOLBAR */}
         <div className="flex flex-wrap gap-1 border-b p-2">
-          <Button onClick={() => editor.chain().focus().toggleBold().run()}>
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().toggleBold().run();
+            }}
+          >
             <Bold size={16} />
           </Button>
 
-          <Button onClick={() => editor.chain().focus().toggleItalic().run()}>
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().toggleItalic().run();
+            }}
+          >
             <Italic size={16} />
           </Button>
 
           <Button
-            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().toggleUnderline().run();
+            }}
           >
             U
+          </Button>
+
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              addLink();
+            }}
+          >
+            <LinkIcon size={16} />
+          </Button>
+
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().toggleLink().run();
+            }}
+          >
+            <Link2Off size={16} />
           </Button>
 
           <Separator orientation="vertical" className="h-6" />
 
           <Button
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().toggleBulletList().run();
+            }}
           >
             <List size={16} />
           </Button>
 
           <Button
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().toggleOrderedList().run();
+            }}
           >
             <ListOrdered size={16} />
           </Button>
 
           <Button
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().toggleBlockquote().run();
+            }}
           >
             <Quote size={16} />
           </Button>
 
           <Button
-            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().toggleCodeBlock().run();
+            }}
           >
             <Code size={16} />
           </Button>
@@ -177,39 +246,56 @@ const RichTextEditor = forwardRef(
 
           {/* ALIGNMENT */}
           <Button
-            onClick={() => editor.chain().focus().setTextAlign("left").run()}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().setTextAlign("left").run();
+            }}
           >
-            L
+            Left
           </Button>
           <Button
-            onClick={() => editor.chain().focus().setTextAlign("center").run()}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().setTextAlign("center").run();
+            }}
           >
-            C
+            Center
           </Button>
           <Button
-            onClick={() => editor.chain().focus().setTextAlign("right").run()}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().setTextAlign("right").run();
+            }}
           >
-            R
+            Right
           </Button>
           <Button
-            onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().setTextAlign("justify").run();
+            }}
           >
-            J
+            Justify
           </Button>
 
           <Separator orientation="vertical" className="h-6" />
 
           {/* FONT SIZE */}
           <select
-            onChange={(e) =>
+            onChange={(e) => {
+              e.preventDefault();
               editor
                 .chain()
                 .focus()
                 .setMark("textStyle", {
                   fontSize: e.target.value,
                 })
-                .run()
-            }
+                .run();
+            }}
           >
             <option value="">Size</option>
             <option value="14px">Small</option>
@@ -219,9 +305,10 @@ const RichTextEditor = forwardRef(
 
           {/* FONT FAMILY */}
           <select
-            onChange={(e) =>
-              editor.chain().focus().setFontFamily(e.target.value).run()
-            }
+            onChange={(e) => {
+              e.preventDefault();
+              editor.chain().focus().setFontFamily(e.target.value).run();
+            }}
           >
             <option value="">Font</option>
             <option value="serif">Serif</option>
@@ -232,23 +319,42 @@ const RichTextEditor = forwardRef(
           {/* COLOR */}
           <input
             type="color"
-            onChange={(e) =>
-              editor.chain().focus().setColor(e.target.value).run()
-            }
+            onChange={(e) => {
+              e.preventDefault();
+              editor.chain().focus().setColor(e.target.value).run();
+            }}
           />
 
           {/* IMAGE */}
-          <Button onClick={addImage}>
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              addImage();
+            }}
+          >
             <ImageIcon size={16} />
           </Button>
 
           <Separator orientation="vertical" className="h-6" />
 
-          <Button onClick={() => editor.chain().focus().undo().run()}>
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().undo().run();
+            }}
+          >
             <Undo size={16} />
           </Button>
 
-          <Button onClick={() => editor.chain().focus().redo().run()}>
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              editor.chain().focus().redo().run();
+            }}
+          >
             <Redo size={16} />
           </Button>
         </div>

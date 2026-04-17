@@ -26,6 +26,7 @@ interface Props {
 }
 
 export default function BlogTable({ blogs, loading, onRefresh }: Props) {
+
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<"date" | "title" | "status">("date");
@@ -51,21 +52,47 @@ export default function BlogTable({ blogs, loading, onRefresh }: Props) {
     });
   }, [blogs, searchTerm, sortBy]);
 
+  const confirmDelete = () => {
+  const input = prompt("Enter delete password:");
+
+  if (!input) {
+    toast.error("Deletion cancelled");
+    return false;
+  }
+
+  if (input !== process.env.NEXT_PUBLIC_DELETE_PASSWORD) {
+    toast.error("Incorrect password");
+    return false;
+  }
+
+  return true;
+};
+
   const handleDelete = async (id: string, title: string) => {
-    toast.loading("Deleting blog...");
+  const isConfirmed = confirmDelete();
+  if (!isConfirmed) return;
 
-    try {
-      const { error } = await supabase.from("blogs").delete().eq("id", id);
-      if (error) throw error;
+  const toastId = toast.loading("Deleting blog...");
 
-      toast.dismiss();
-      toast.success(`Blog "${title}" deleted successfully`);
-      onRefresh();
-    } catch (error: any) {
-      toast.dismiss();
-      toast.error("Failed to delete blog: " + error.message);
-    }
-  };
+  try {
+    const { error } = await supabase
+      .from("blogs")
+      .delete()
+      .eq("id", id);
+
+    if (error) throw error;
+
+    toast.success(`Blog "${title}" deleted successfully`, {
+      id: toastId,
+    });
+
+    onRefresh();
+  } catch (error: any) {
+    toast.error("Failed to delete blog: " + error.message, {
+      id: toastId,
+    });
+  }
+};
 
   if (loading) {
     return (

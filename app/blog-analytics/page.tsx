@@ -47,7 +47,6 @@ export default function BlogAnalyticsPage() {
     fetchBlogs();
   }, []);
 
-  // Filter blogs based on search and status
   useEffect(() => {
     let filtered = blogs;
 
@@ -58,7 +57,6 @@ export default function BlogAnalyticsPage() {
       );
     }
 
-    // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(
         (blog) =>

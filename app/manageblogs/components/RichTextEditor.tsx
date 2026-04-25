@@ -298,7 +298,7 @@ const RichTextEditor = forwardRef(
             }}
           >
             <option value="">Size</option>
-            <option value="14px">Small</option>
+            <option value="16px">Small</option>
             <option value="18px">Medium</option>
             <option value="24px">Large</option>
           </select>
